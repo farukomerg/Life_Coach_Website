@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Güler Yaşam Koçluğu - Giriş Yap</title>
+    <style>
+        /* Login Panel Stilleri */
+        .login-section {
+            background: linear-gradient(140deg, #506d89 0%, #8fd096 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 420px;
+            transition: all 0.3s ease;
+        }
+
+        .login-header {
+            background: #4797b1;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .login-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .login-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+
+        .login-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #4797b1;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            background: #4797b1;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            background: #4797b1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-admin-direct {
+            width: 100%;
+            background: #f8f9fa;
+            color: #4797b1;
+            border: 2px solid #4797b1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn-admin-direct:hover {
+            background: #4797b1;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn-register {
+            background: transparent;
+            color: #4797b1;
+            border: 2px solid #4797b1;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-register:hover {
+            background: #4797b1;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        /* Modal Stilleri */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-top: 4px solid #47a5b1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .modal-header h3 {
+            color: #2c3e50;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #6c757d;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #47a5b1;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .user-type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .user-type-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .user-type-btn.active {
+            border-color: #47a5b1;
+            background: rgba(220, 53, 69, 0.1);
+            color: #47a5b1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }       
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100vw;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin-left: 0;
+            margin-right: 0;
+        } 
+
+
+        /* Responsive Tasarım */
+        @media (max-width: 576px) {
+            .login-container {
+                max-width: 100%;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .modal-content {
+                padding: 25px 20px;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Section -->
+    <section class="login-section">
+        <div class="login-container">
+            <div class="login-header">
+                <h2>Giriş Yap</h2>
+                <p>Güler Yaşam Koçluğu'na hoş geldiniz</p>
+            </div>
+            <div class="login-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">E-posta Adresi</label>
+                        <input type="email" class="form-control" id="email" placeholder="E-posta adresinizi girin" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Şifre</label>
+                        <input type="password" class="form-control" id="password" placeholder="Şifrenizi girin" required>
+                    </div>
+                    <button type="submit" class="btn-login">Giriş Yap</button>
+                    <button type="button" class="btn-admin-direct" onclick="window.location.href='admin.html'">
+                        Admin Olarak Giriş Yap
+                    </button>                
+                </form>
+                
+                <div class="register-link">
+                    <p>Hesabınız yok mu?</p>
+                    <button class="btn-register" onclick="openModal('registerModal')">Hesap Oluştur</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kayıt Ol Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Yeni Hesap Oluştur</h3>
+                <button class="close-modal" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            <form id="registerForm">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">Ad</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="Adınız" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Soyad</label>
+                        <input type="text" class="form-control" id="lastName" placeholder="Soyadınız" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Telefon Numarası</label>
+                    <input type="tel" class="form-control" id="phone" placeholder="05XX XXX XX XX" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerEmail">E-posta Adresi</label>
+                    <input type="email" class="form-control" id="registerEmail" placeholder="E-posta adresiniz" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword">Şifre</label>
+                    <input type="password" class="form-control" id="registerPassword" placeholder="Şifreniz (en az 6 karakter)" required minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Şifre Tekrar</label>
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="Şifrenizi tekrar girin" required minlength="6">
+                </div>
+                
+                <button type="submit" class="btn-login">Hesap Oluştur</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal işlevselliği
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Kullanıcı tipi seçimi
+        document.querySelectorAll('.user-type-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.user-type-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        function openAdminLogin() {
+            const email = document.getElementById('email').value || 'admin@guleryasam.com';
+            const password = document.getElementById('password').value || 'admin123';
+    
+            // Admin bilgilerini otomatik doldur
+            document.getElementById('email').value = 'admin@guleryasam.com';
+            document.getElementById('password').value = 'admin123';
+    
+          
+    
+        }
+
+        // Giriş formu işleme
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Basit doğrulama
+            if (!email || !password) {
+                alert('Lütfen tüm alanları doldurun.');
+                return;
+            }
+            
+            // Admin kontrolü (örnek: admin@guleryasam.com)
+            if (email === 'admin@guleryasam.com' && password === 'admin123') {
+                alert('Admin olarak giriş yapılıyor...');
+                window.location.href = 'admin.html';
+            } else {
+                // Normal kullanıcı girişi
+                alert('Kullanıcı olarak giriş yapılıyor...');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Kayıt formu işleme
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const userType = document.querySelector('.user-type-btn.active').getAttribute('data-type');
+            
+            // Doğrulamalar
+            if (!firstName || !lastName || !phone || !email || !password || !confirmPassword) {
+                alert('Lütfen tüm alanları doldurun.');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Şifreler eşleşmiyor.');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('Şifre en az 6 karakter olmalıdır.');
+                return;
+            }
+            
+            // Telefon formatı kontrolü (basit)
+            const phoneRegex = /^[0-9]{10,11}$/;
+            if (!phoneRegex.test(phone.replace(/\D/g, ''))) {
+                alert('Lütfen geçerli bir telefon numarası girin.');
+                return;
+            }
+            
+            // Başarılı kayıt
+            alert(`${userType === 'admin' ? 'Admin' : 'Kullanıcı'} hesabı başarıyla oluşturuldu!\nAd: ${firstName} ${lastName}\nE-posta: ${email}`);
+            closeModal('registerModal');
+            
+            // Formu temizle
+            document.getElementById('registerForm').reset();
+            document.querySelectorAll('.user-type-btn')[0].click(); // Varsayılan olarak kullanıcı seçili
+        });
+
+        // Modal dışına tıklanınca kapatma
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Telefon numarası formatlama
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                value = value.match(/(\d{0,4})(\d{0,3})(\d{0,3})(\d{0,2})/);
+                e.target.value = !value[2] ? value[1] : value[1] + ' ' + value[2] + (value[3] ? ' ' + value[3] : '') + (value[4] ? ' ' + value[4] : '');
+            }
+        });
+    </script>
+</body>
+</html>

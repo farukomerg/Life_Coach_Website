@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duyurular & Kampanyalar - Yaşam Koçluğu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .back-to-home {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: white;
+            color: #182848;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-home:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        .announcements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .announcement-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .announcement-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .announcement-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            border-bottom: 4px solid #4b6cb7;
+        }
+        
+        .announcement-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .announcement-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #182848;
+        }
+        
+        .announcement-excerpt {
+            color: #666;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .announcement-date {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        
+        .read-more {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4b6cb7;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            align-self: flex-start;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .read-more:hover {
+            background-color: #182848;
+        }
+        
+        .discount-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #ff6b6b;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .card-header {
+            position: relative;
+        }
+        
+        .new-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #4b6cb7;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #666;
+            border-top: 1px solid #ddd;
+            margin-top: 30px;
+        }
+        
+        /* Modal Stilleri */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            padding: 25px 30px 10px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #666;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            color: #182848;
+            margin-bottom: 10px;
+            padding-right: 40px;
+        }
+        
+        .modal-date {
+            color: #888;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        
+        .modal-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .modal-badge.new {
+            background-color: #4b6cb7;
+            color: white;
+        }
+        
+        .modal-badge.discount {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-content {
+            padding: 25px 30px;
+        }
+        
+        .modal-description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 25px;
+        }
+        
+        .modal-details {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .modal-details h3 {
+            color: #182848;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .modal-details ul {
+            padding-left: 20px;
+        }
+        
+        .modal-details li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .modal-button {
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .modal-button.primary {
+            background-color: #4b6cb7;
+            color: white;
+        }
+        
+        .modal-button.primary:hover {
+            background-color: #182848;
+        }
+        
+        .modal-button.secondary {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .modal-button.secondary:hover {
+            background-color: #ddd;
+        }
+        
+        @media (max-width: 768px) {
+            .announcements-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .modal {
+                width: 95%;
+                max-height: 85vh;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Duyurular & Kampanyalar</h1>
+            <p class="subtitle">Güncel Haberler ve Fırsatlar</p>
+            <a href="index.html" class="back-to-home">Ana Sayfaya Dön</a>
+        </header>
+        
+        <div class="announcements-grid">
+            <!-- Duyuru 1 -->
+            <div class="announcement-card">
+                <div class="card-header">
+                    <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Yaşam Koçluğu" class="announcement-image">
+                    <div class="new-badge">YENİ</div>
+                    <div class="discount-badge">%20 İNDİRİM</div>
+                </div>
+                <div class="announcement-content">
+                    <h2 class="announcement-title">Yeni Yaşam Koçluğu Programı Başlıyor!</h2>
+                    <div class="announcement-date">Kasım 2025</div>
+                    <p class="announcement-excerpt">Ekim ayına özel %20 indirim fırsatıyla yeni yaşam koçluğu programımız başlıyor. Kendinizi geliştirmek ve hedeflerinize ulaşmak için bu fırsatı kaçırmayın.</p>
+                    <button class="read-more" data-id="1">Detayları Gör</button>
+                </div>
+            </div>
+            
+            <!-- Duyuru 2 -->
+            <div class="announcement-card">
+                <div class="card-header">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Yeni Ofis" class="announcement-image">
+                    <div class="new-badge">YENİ</div>
+                </div>
+                <div class="announcement-content">
+                    <h2 class="announcement-title">Yeni Ofisimiz Açıldı!</h2>
+                    <div class="announcement-date">Ekim 2025</div>
+                    <p class="announcement-excerpt">Kocaeli İzmit'te yeni ofisimiz hizmete açılmıştır. Daha konforlu ve modern bir ortamda hizmet vermeye başladık. Randevu almak için bizi arayın.</p>
+                    <button class="read-more" data-id="2">Detayları Gör</button>
+                </div>
+            </div>
+            
+            <!-- Duyuru 3 -->
+            <div class="announcement-card">
+                <div class="card-header">
+                    <img src="https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Kariyer Semineri" class="announcement-image">
+                </div>
+                <div class="announcement-content">
+                    <h2 class="announcement-title">Ücretsiz Seminer: Kariyer Yolculuğunuzu Planlayın</h2>
+                    <div class="announcement-date">25 Ekim 2025</div>
+                    <p class="announcement-excerpt">25 Ekim'de düzenleyeceğimiz ücretsiz kariyer planlama seminerimize davetlisiniz. Kariyerinizde doğru adımları atmak için bu fırsatı kaçırmayın.</p>
+                    <button class="read-more" data-id="3">Detayları Gör</button>
+                </div>
+            </div>
+            
+            <!-- Duyuru 4 -->
+            <div class="announcement-card">
+                <div class="card-header">
+                    <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Online Koçluk" class="announcement-image">
+                    <div class="new-badge">YENİ</div>
+                </div>
+                <div class="announcement-content">
+                    <h2 class="announcement-title">Online Koçluk Hizmeti Başladı</h2>
+                    <div class="announcement-date">Eylül 2025</div>
+                    <p class="announcement-excerpt">Artık online olarak da koçluk hizmeti alabilirsiniz. İster evinizden ister ofisinizden, size uygun zaman dilimlerinde koçluk hizmetinden yararlanın.</p>
+                    <button class="read-more" data-id="4">Detayları Gör</button>
+                </div>
+            </div>
+            
+            <!-- Duyuru 5 -->
+            <div class="announcement-card">
+                <div class="card-header">
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Öğrenci İndirimi" class="announcement-image">
+                    <div class="discount-badge">%30 İNDİRİM</div>
+                </div>
+                <div class="announcement-content">
+                    <h2 class="announcement-title">Öğrencilere Özel %30 İndirim</h2>
+                    <div class="announcement-date">Ekim 2025 - Aralık 2025</div>
+                    <p class="announcement-excerpt">Öğrencilerimize özel olarak tüm koçluk hizmetlerimizde %30 indirim uygulanacaktır. Öğrenci belgenizi göstererek bu avantajdan yararlanabilirsiniz.</p>
+                    <button class="read-more" data-id="5">Detayları Gör</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 Yaşam Koçluğu Merkezi. Tüm hakları saklıdır.</p>
+            <p>İletişim: info@yasamkoclugu.com | Tel: 0 (123) 456 78 90</p>
+        </footer>
+    </div>
+    
+    <!-- Modal (Açılır Pencere) -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <button class="modal-close" id="modalClose">&times;</button>
+                <h2 class="modal-title" id="modalTitle">Duyuru Başlığı</h2>
+                <div class="modal-date" id="modalDate">Tarih</div>
+                <div id="modalBadges"></div>
+            </div>
+            <img id="modalImage" src="" alt="" class="modal-image">
+            <div class="modal-content">
+                <p class="modal-description" id="modalDescription">Duyuru açıklaması burada yer alacak.</p>
+                
+                <div class="modal-details" id="modalDetails">
+                    <!-- Detaylar buraya eklenecek -->
+                </div>
+                
+                <div class="modal-actions">
+                    <a href="#" class="modal-button primary" id="modalActionButton">Başvur / Katıl</a>
+                    <button class="modal-button secondary" id="modalCloseButton">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Duyuru verileri
+        const announcements = {
+            1: {
+                title: "Yeni Yaşam Koçluğu Programı Başlıyor!",
+                date: "Kasım 2025",
+                image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                description: "Ekim ayına özel %20 indirim fırsatıyla yeni yaşam koçluğu programımız başlıyor. Kendinizi geliştirmek ve hedeflerinize ulaşmak için bu fırsatı kaçırmayın.",
+                details: `
+                    <h3>Program Detayları</h3>
+                    <ul>
+                        <li><strong>Başlangıç Tarihi:</strong> 15 Kasım 2025</li>
+                        <li><strong>Süre:</strong> 8 Hafta</li>
+                        <li><strong>İçerik:</strong> Bireysel koçluk seansları, grup çalışmaları, hedef belirleme atölyeleri</li>
+                        <li><strong>Normal Ücret:</strong> 2.400 TL</li>
+                        <li><strong>İndirimli Ücret:</strong> 1.920 TL (%20 indirimle)</li>
+                        <li><strong>Son Başvuru Tarihi:</strong> 10 Ekim 2023</li>
+                    </ul>
+                `,
+                badges: [
+                    { text: "YENİ", class: "new" },
+                    { text: "%20 İNDİRİM", class: "discount" }
+                ],
+                actionText: "Programa Başvur",
+                actionLink: "#"
+            },
+            2: {
+                title: "Yeni Ofisimiz Açıldı!",
+                date: "Ekim 2025",
+                image: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                description: "Kocaeli İzmit'te yeni ofisimiz hizmete açılmıştır. Daha konforlu ve modern bir ortamda hizmet vermeye başladık. Randevu almak için bizi arayın.",
+                details: `
+                    <h3>Yeni Ofis Bilgileri</h3>
+                    <ul>
+                        <li><strong>Adres:</strong> İzmit, Kocaeli - Yenişehir Mahallesi, Atatürk Bulvarı No:123</li>
+                        <li><strong>Çalışma Saatleri:</strong> Hafta içi 09:00 - 18:00, Cumartesi 10:00 - 15:00</li>
+                        <li><strong>Telefon:</strong> 0 (262) 123 45 67</li>
+                        <li><strong>Park:</strong> Binada ücretsiz otopark mevcuttur</li>
+                        <li><strong>Toplu Taşıma:</strong> Otobüs ve minibüs duraklarına 5 dakika yürüme mesafesinde</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Açılış Özel:</strong> İlk konsültasyon ücretsizdir!</p>
+                `,
+                badges: [
+                    { text: "YENİ", class: "new" }
+                ],
+                actionText: "Randevu Al",
+                actionLink: "#"
+            },
+            3: {
+                title: "Ücretsiz Seminer: Kariyer Yolculuğunuzu Planlayın",
+                date: "25 Ekim 2025, Saat: 18:30",
+                image: "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                description: "25 Ekim'de düzenleyeceğimiz ücretsiz kariyer planlama seminerimize davetlisiniz. Kariyerinizde doğru adımları atmak için bu fırsatı kaçırmayın.",
+                details: `
+                    <h3>Seminer İçeriği</h3>
+                    <ul>
+                        <li>Kariyer planlaması nasıl yapılır?</li>
+                        <li>Güçlü yönlerinizi keşfetme</li>
+                        <li>İş hayatında hedef belirleme teknikleri</li>
+                        <li>CV ve mülakat hazırlığı ipuçları</li>
+                        <li>Kariyer değişikliği için stratejiler</li>
+                    </ul>
+                    <h3 style="margin-top: 20px;">Konuşmacılar</h3>
+                    <ul>
+                        <li>Ahmet Yılmaz - Kariyer Koçu (10+ yıl deneyim)</li>
+                        <li>Zeynep Kaya - İK Uzmanı</li>
+                        <li>Mehmet Demir - İş Geliştirme Uzmanı</li>
+                    </ul>
+                `,
+                badges: [],
+                actionText: "Seminere Kaydol",
+                actionLink: "#"
+            },
+            4: {
+                title: "Online Koçluk Hizmeti Başladı",
+                date: "Eylül 2025",
+                image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                description: "Artık online olarak da koçluk hizmeti alabilirsiniz. İster evinizden ister ofisinizden, size uygun zaman dilimlerinde koçluk hizmetinden yararlanın.",
+                details: `
+                    <h3>Online Koçluk Avantajları</h3>
+                    <ul>
+                        <li>Mekandan bağımsız - Dünyanın her yerinden katılabilirsiniz</li>
+                        <li>Zaman tasarrufu - Yol ve trafik derdi yok</li>
+                        <li>Esnek program - Size uygun saatlerde seans alabilirsiniz</li>
+                        <li>Gizlilik - Kendi konfor alanınızda seanslara katılın</li>
+                        <li>Kayıtlı seanslar - İsterseniz seans kayıtlarını tekrar izleyebilirsiniz</li>
+                    </ul>
+                    <h3 style="margin-top: 20px;">Teknik Gereksinimler</h3>
+                    <ul>
+                        <li>İnternet bağlantısı</li>
+                        <li>Webcam ve mikrofon (dahili veya harici)</li>
+                        <li>Zoom veya Skype uygulaması</li>
+                        <li>Sessiz ve özel bir ortam</li>
+                    </ul>
+                `,
+                badges: [
+                    { text: "YENİ", class: "new" }
+                ],
+                actionText: "Online Koçluk Al",
+                actionLink: "#"
+            },
+            5: {
+                title: "Öğrencilere Özel %30 İndirim",
+                date: "Ekim 2025 - Aralık 2025",
+                image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+                description: "Öğrencilerimize özel olarak tüm koçluk hizmetlerimizde %30 indirim uygulanacaktır. Öğrenci belgenizi göstererek bu avantajdan yararlanabilirsiniz.",
+                details: `
+                    <h3>İndirim Detayları</h3>
+                    <ul>
+                        <li><strong>Geçerlilik Tarihi:</strong> 1 Ekim - 31 Aralık 2023</li>
+                        <li><strong>Uygulama:</strong> Tüm bireysel ve grup koçluk hizmetlerinde</li>
+                        <li><strong>Kimler Yararlanabilir:</strong> Lisans, yüksek lisans ve doktora öğrencileri</li>
+                        <li><strong>Gerekli Belgeler:</strong> Geçerli öğrenci kimliği veya öğrenci belgesi</li>
+                        <li><strong>İndirim Oranı:</strong> %30</li>
+                    </ul>
+                    <h3 style="margin-top: 20px;">Öğrencilere Özel Programlar</h3>
+                    <ul>
+                        <li>Sınav stresi yönetimi koçluğu</li>
+                        <li>Kariyer planlama ve staj danışmanlığı</li>
+                        <li>Zaman yönetimi ve verimli ders çalışma teknikleri</li>
+                        <li>Öğrenci-öğretmen iletişimi geliştirme</li>
+                        <li>Hedef belirleme ve motivasyon artırma</li>
+                    </ul>
+                `,
+                badges: [
+                    { text: "%30 İNDİRİM", class: "discount" }
+                ],
+                actionText: "Öğrenci İndiriminden Yararlan",
+                actionLink: "#"
+            }
+        };
+        
+        // Modal elementi
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalClose = document.getElementById('modalClose');
+        const modalCloseButton = document.getElementById('modalCloseButton');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDate = document.getElementById('modalDate');
+        const modalImage = document.getElementById('modalImage');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalDetails = document.getElementById('modalDetails');
+        const modalBadges = document.getElementById('modalBadges');
+        const modalActionButton = document.getElementById('modalActionButton');
+        
+        // "Detayları Gör" butonlarına tıklama olayını ekle
+        document.querySelectorAll('.read-more').forEach(button => {
+            button.addEventListener('click', function() {
+                const announcementId = this.getAttribute('data-id');
+                showAnnouncementDetails(announcementId);
+            });
+        });
+        
+        // Modalı göster
+        function showAnnouncementDetails(id) {
+            const announcement = announcements[id];
+            
+            // Modal içeriğini doldur
+            modalTitle.textContent = announcement.title;
+            modalDate.textContent = announcement.date;
+            modalImage.src = announcement.image;
+            modalImage.alt = announcement.title;
+            modalDescription.textContent = announcement.description;
+            modalDetails.innerHTML = announcement.details;
+            modalActionButton.textContent = announcement.actionText;
+            modalActionButton.href = announcement.actionLink;
+            
+            // Badge'leri temizle ve ekle
+            modalBadges.innerHTML = '';
+            announcement.badges.forEach(badge => {
+                const badgeElement = document.createElement('span');
+                badgeElement.className = `modal-badge ${badge.class}`;
+                badgeElement.textContent = badge.text;
+                modalBadges.appendChild(badgeElement);
+            });
+            
+            // Modalı göster
+            modalOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Sayfa kaydırmayı engelle
+        }
+        
+        // Modalı kapat
+        function closeModal() {
+            modalOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Sayfa kaydırmayı geri aç
+        }
+        
+        // Kapatma olaylarını ekle
+        modalClose.addEventListener('click', closeModal);
+        modalCloseButton.addEventListener('click', closeModal);
+        
+        // Modal dışına tıklayarak kapatma
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+        
+        // ESC tuşu ile kapatma
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // Ana sayfaya dön butonu
+        document.querySelector('.back-to-home').addEventListener('click', function() {
+            console.log('Ana sayfaya yönlendiriliyor...');
+        });
+    </script>
+</body>
+</html>
